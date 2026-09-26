@@ -66,7 +66,20 @@ This writes everything to `release/`:
 - `larpcord-source.zip`, the full source of all of the above. The GPL requires offering it next to the downloads. The Android signing key is left out.
 - `site/`, the static website with all the downloads in `site/downloads/`.
 
-To put the site online with GitHub Pages, create a repository, copy the contents of `release/site/` into it, and turn on Pages in the repository's settings (Deploy from a branch, root folder). It appears at `https://<your-username>.github.io/<repository>/`. If you name the repository `<your-username>.github.io`, it's at `https://<your-username>.github.io/` instead.
+The website is live at https://larprober.github.io/larpcord/. GitHub Pages serves it from this repository's `gh-pages` branch, which holds only the built site. To publish a new version after running the release script:
+
+```sh
+git worktree add ../larpcord-pages gh-pages
+cp -r release/site/. ../larpcord-pages/
+cd ../larpcord-pages
+git add -A
+git commit -m "Website <version>"
+git push
+cd ../larpcord
+git worktree remove ../larpcord-pages
+```
+
+GitHub rebuilds the page within a minute or so.
 
 ## Where things live
 
