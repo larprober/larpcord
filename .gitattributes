@@ -1,0 +1,6 @@
+*.exe binary
+*.apk binary
+*.zip binary
+*.png binary
+*.html text eol=lf
+*.js text eol=lf
