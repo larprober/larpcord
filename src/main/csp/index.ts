@@ -43,7 +43,7 @@ export const CspPolicies: PolicyMap = {
     "i.pinimg.com": ImageSrc, // Pinterest, used by some themes
     "files.catbox.moe": ImageAndCssSrc, // Catbox, used by some themes
 
-    "cdn.discordapp.com": ImageAndCssSrc, // Discord CDN, used by Vencord and some themes to load media
+    "cdn.discordapp.com": ImageAndCssSrc, // Discord CDN, used by Larpcord and some themes to load media
     "media.discordapp.net": ImageSrc, // Discord media CDN, possible alternative to Discord CDN
 
     // CDNs used for some things by Vencord.
@@ -52,7 +52,7 @@ export const CspPolicies: PolicyMap = {
     "cdn.jsdelivr.net": ImageScriptsAndCssSrc,
 
     // Function Specific
-    "api.github.com": ConnectSrc, // used for updating Vencord itself
+    "api.github.com": ConnectSrc, // used for update checks
     "ws.audioscrobbler.com": ConnectSrc, // Last.fm API
     "musicbrainz.org": ConnectSrc,
     "*.listenbrainz.org": ConnectSrc,

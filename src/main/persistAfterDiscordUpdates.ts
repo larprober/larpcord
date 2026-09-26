@@ -18,7 +18,7 @@
 
 import { app } from "electron";
 import EventEmitter from "events";
-import { copyFileSync, existsSync, readdirSync, renameSync } from "original-fs";
+import { copyFileSync, existsSync, readdirSync, renameSync, rmSync, statSync } from "original-fs";
 import { basename, dirname, join } from "path";
 
 function isNewer($new: string, old: string) {
@@ -55,14 +55,20 @@ function patchLatest() {
         const newAppAsar = join(resources, "app.asar");
         const newAppAsarBackup = join(resources, "_app.asar");
 
-        if (!existsSync(oldVencordAsar) || !existsSync(newAppAsar) || existsSync(newAppAsarBackup)) return;
+        if (!existsSync(oldVencordAsar) || !existsSync(newAppAsar)) return;
+        // Loaders are tiny; Discord's real app.asar is megabytes. If the new version already
+        // has a loader there's nothing to do.
+        if (statSync(newAppAsar).size < 64 * 1024) return;
 
-        console.info(`[Vencord] Detected Host Update (${currentVersion} -> ${latestVersion}). Repatching...`);
+        console.info(`[Larpcord] Detected Host Update (${currentVersion} -> ${latestVersion}). Repatching...`);
 
+        // A leftover _app.asar means Discord reinstalled itself over an earlier patch; the
+        // real app.asar it just wrote is the current one.
+        if (existsSync(newAppAsarBackup)) rmSync(newAppAsarBackup);
         renameSync(newAppAsar, newAppAsarBackup);
         copyFileSync(oldVencordAsar, newAppAsar);
     } catch (err) {
-        console.error("[Vencord] Failed to repatch latest host update", err);
+        console.error("[Larpcord] Failed to repatch latest host update", err);
     }
 }
 

@@ -18,7 +18,7 @@
 
 import "./styles.css";
 
-import { definePluginSettings } from "@api/Settings";
+import { definePluginSettings, migratePluginSettings } from "@api/Settings";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
@@ -68,7 +68,7 @@ function VencordPopoutButton() {
                     ref={buttonRef}
                     className="vc-toolbox-btn"
                     onClick={() => setShow(v => !v)}
-                    tooltip={isShown ? null : "Vencord Toolbox"}
+                    tooltip={isShown ? null : "Larpcord Toolbox"}
                     icon={() => <Icon isShown={isShown} />}
                     selected={isShown}
                 />
@@ -77,9 +77,10 @@ function VencordPopoutButton() {
     );
 }
 
+migratePluginSettings("LarpcordToolbox", "VencordToolbox");
 export default definePlugin({
-    name: "VencordToolbox",
-    description: "Adds a button to the titlebar that houses Vencord quick actions",
+    name: "LarpcordToolbox",
+    description: "Adds a button to the titlebar that houses Larpcord quick actions",
     tags: ["Utility", "Developers"],
     authors: [Devs.Ven, Devs.AutumnVN],
 

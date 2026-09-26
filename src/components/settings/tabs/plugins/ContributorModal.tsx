@@ -7,7 +7,6 @@
 import "./ContributorModal.css";
 
 import { useSettings } from "@api/Settings";
-import { Link } from "@components/Link";
 import { DevsById } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { fetchUserProfile } from "@utils/discord";
@@ -50,8 +49,6 @@ function ContributorModal({ user, modalProps }: { user: User; modalProps: Render
             .sort((a, b) => Number(a.required ?? false) - Number(b.required ?? false));
     }, [user.id, user.username]);
 
-    const ContributedHyperLink = <Link href="https://vencord.dev/source">contributed</Link>;
-
     return (
         <Modal
             {...modalProps}
@@ -84,12 +81,12 @@ function ContributorModal({ user, modalProps }: { user: User; modalProps: Render
                 plugins.length
                     ? (
                         <Forms.FormText>
-                            This person has {ContributedHyperLink} to {pluralise(plugins.length, "plugin")}!
+                            This person has contributed to {pluralise(plugins.length, "plugin")}!
                         </Forms.FormText>
                     )
                     : (
                         <Forms.FormText>
-                            This person has not made any plugins. They likely {ContributedHyperLink} to Vencord in other ways!
+                            This person hasn't made any of the included plugins.
                         </Forms.FormText>
                     )
             }

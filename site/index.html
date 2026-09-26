@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Larpcord</title>
+<meta name="description" content="Larpcord is a Discord mod with dice rolling, character names and time zones built in, plus __PLUGIN_COUNT__ other plugins. For Windows, Android and desktop browsers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Alegreya:wght@700;800&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=DM+Mono:wght@400;500&display=swap">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12,2 L20.66,7 L20.66,17 L12,22 L3.34,17 L3.34,7 Z' fill='%23CB8C32'/%3E%3Cpath d='M12,7.4 L8.016,14.3 L15.984,14.3 Z' fill='%23F6CD7C'/%3E%3C/svg%3E">
+<style>
+  /* One dark look, flat colors, no effects. */
+  :root {
+    color-scheme: dark;
+    --ground: #110f0c;
+    --panel: #19150f;
+    --line: #342b21;
+    --line-soft: #241e17;
+    --text: #eee5d5;
+    --body-text: #d6ccbb;
+    --muted: #a69783;
+    --faint: #7f7263;
+    --gold: #e0a84f;
+    --gold-text: #f0c67a;
+    --on-gold: #1c1307;
+    --display: "Alegreya", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    --body: "Alegreya Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --mono: "DM Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html { background: var(--ground); }
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--text);
+    font: 400 18px/1.6 var(--body);
+    -webkit-font-smoothing: antialiased;
+    padding-inline: 20px;
+  }
+  a { color: var(--gold-text); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  code, kbd { font-family: var(--mono); font-size: .85em; }
+  code { color: var(--gold-text); background: #221b13; padding: .08em .35em; border-radius: 3px; }
+  img { max-width: 100%; height: auto; }
+  .wrap { max-width: 1100px; margin-inline: auto; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 800; margin: 0; text-wrap: balance; }
+  h2 { font-size: clamp(32px, 4.2vw, 46px); line-height: 1.05; }
+  h3 { font-size: 23px; line-height: 1.2; }
+  p { margin: 0; }
+
+  .top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; border-bottom: 1px solid var(--line-soft); }
+  .brand { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; }
+  .brand svg { width: 30px; height: 30px; }
+  .brand span { font: 800 22px/1 var(--display); }
+  .top nav { display: flex; gap: 24px; font-size: 16px; }
+  .top nav a { color: var(--muted); text-decoration: none; }
+  .top nav a:hover { color: var(--text); }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 64px);
+    align-items: center;
+    padding-block: clamp(40px, 7vw, 84px);
+  }
+  .mark { width: 72px; height: 72px; margin-bottom: 22px; }
+  .hero h1 { font-size: clamp(56px, 9vw, 104px); line-height: .9; letter-spacing: -.02em; }
+  .lede { margin-top: 22px; max-width: 30em; font-size: clamp(19px, 1.8vw, 21px); line-height: 1.5; color: var(--body-text); }
+
+  .downloads { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+  .dl {
+    display: inline-flex; align-items: center; gap: 11px;
+    padding: 11px 16px 11px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    color: var(--text);
+    text-decoration: none;
+    font: 500 16px/1.2 var(--body);
+  }
+  .dl:hover { border-color: #5c4b37; color: var(--text); }
+  .dl svg { width: 21px; height: 21px; flex: none; color: var(--gold); }
+  .dl small { display: block; margin-top: 3px; font: 400 13px/1.2 var(--mono); color: var(--faint); }
+  .dl.primary { background: var(--gold); border-color: var(--gold); color: var(--on-gold); }
+  .dl.primary:hover { background: #e9b560; border-color: #e9b560; color: var(--on-gold); }
+  .dl.primary svg { color: var(--on-gold); }
+  .dl.primary small { color: #5e4219; }
+  .fineprint { margin-top: 16px; font-size: 15px; color: var(--faint); }
+  .fineprint a { color: var(--muted); }
+
+  .shot { margin: 0; }
+  .shot img { display: block; border: 1px solid var(--line); border-radius: 8px; }
+  .shot figcaption { margin-top: 10px; font-size: 14px; color: var(--faint); }
+
+  section.block { padding-block: clamp(52px, 7vw, 88px); border-top: 1px solid var(--line-soft); }
+  .section-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 16px 56px; align-items: end; margin-bottom: 36px; }
+  .section-head p { color: var(--muted); max-width: 50ch; }
+
+  /* the ten, set like the contents page of a rulebook */
+  .index { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; margin: 0; padding: 0; list-style: none; }
+  .entry { padding-block: 20px; border-bottom: 1px solid var(--line-soft); }
+  .entry-line { display: flex; align-items: baseline; gap: 10px; }
+  .entry-name { font: 700 23px/1.15 var(--display); color: var(--gold-text); }
+  .leader { flex: 1; border-bottom: 1.5px dotted #4a3e2f; transform: translateY(-5px); min-width: 16px; }
+  .state { font: 500 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .05em; color: var(--faint); white-space: nowrap; }
+  .state.on { color: var(--gold); }
+  .entry p { margin-top: 7px; color: var(--body-text); font-size: 17px; max-width: 48ch; }
+  .entry .try { margin-top: 8px; font-size: 14px; color: var(--faint); }
+
+  .appendix { columns: 4 210px; column-gap: 32px; margin: 0; padding: 0; list-style: none; font: 400 14px/1.9 var(--mono); color: var(--muted); }
+  .appendix li { break-inside: avoid; }
+
+  .platforms { border-top: 1px solid var(--line); }
+  .platform { display: grid; grid-template-columns: minmax(0, 260px) minmax(0, 1fr); gap: 20px 48px; padding-block: 28px; border-bottom: 1px solid var(--line); }
+  .platform-side { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+  .platform-head { display: flex; align-items: center; gap: 10px; }
+  .platform-head svg { width: 24px; height: 24px; color: var(--gold); }
+  .platform ol { margin: 0; padding: 0; list-style: none; counter-reset: step; display: grid; gap: 10px; }
+  .platform li { counter-increment: step; display: grid; grid-template-columns: 24px minmax(0, 1fr); gap: 8px; color: var(--body-text); }
+  .platform li::before { content: counter(step) "."; font: 700 16px/1.6 var(--display); color: var(--gold); }
+  .platform .note { margin-top: 14px; font-size: 16px; color: var(--muted); max-width: 60ch; }
+
+  .faq { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 56px; margin: 0; }
+  .faq dt { font: 700 21px/1.25 var(--display); margin-bottom: 6px; }
+  .faq dd { margin: 0; color: var(--body-text); font-size: 17px; max-width: 52ch; }
+
+  .legal { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 56px; }
+  .legal h3 { margin-bottom: 10px; }
+  .legal p { color: var(--body-text); font-size: 16px; max-width: 58ch; }
+  .legal p + p { margin-top: 10px; }
+
+  footer { border-top: 1px solid var(--line-soft); padding-block: 32px 52px; }
+  .foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 28px; font-size: 15px; color: var(--faint); }
+  .foot a { color: var(--muted); }
+  .foot .brand svg { width: 24px; height: 24px; }
+  .foot .brand span { font-size: 18px; }
+
+  @media (max-width: 900px) {
+    .hero, .section-head, .index, .faq, .legal, .platform { grid-template-columns: minmax(0, 1fr); }
+    .top nav { display: none; }
+  }
+  @media (max-width: 520px) {
+    body { padding-inline: 16px; font-size: 17px; }
+    .dl { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="d20" viewBox="0 0 24 24">
+      <path d="M12,2 L3.34,7 L12,7.4 Z" fill="#EBB35A"/><path d="M12,2 L12,7.4 L20.66,7 Z" fill="#CB8C32"/><path d="M3.34,7 L8.016,14.3 L12,7.4 Z" fill="#DDA048"/><path d="M20.66,7 L12,7.4 L15.984,14.3 Z" fill="#B47420"/><path d="M3.34,7 L3.34,17 L8.016,14.3 Z" fill="#BB7C28"/><path d="M3.34,17 L12,22 L8.016,14.3 Z" fill="#99621A"/><path d="M8.016,14.3 L12,22 L15.984,14.3 Z" fill="#C28530"/><path d="M15.984,14.3 L12,22 L20.66,17 Z" fill="#865414"/><path d="M20.66,7 L15.984,14.3 L20.66,17 Z" fill="#774A11"/><path d="M12,7.4 L8.016,14.3 L15.984,14.3 Z" fill="#F6CD7C"/>
+      <path d="M12,2 L20.66,7 L20.66,17 L12,22 L3.34,17 L3.34,7 Z M12,2 L12,7.4 M3.34,7 L12,7.4 M20.66,7 L12,7.4 M3.34,7 L8.016,14.3 M3.34,17 L8.016,14.3 M12,22 L8.016,14.3 M20.66,7 L15.984,14.3 M20.66,17 L15.984,14.3 M12,22 L15.984,14.3 M12,7.4 L8.016,14.3 M8.016,14.3 L15.984,14.3 M15.984,14.3 L12,7.4" fill="none" stroke="#2A1A07" stroke-width="0.35" stroke-linejoin="round" stroke-linecap="round" opacity="0.55"/>
+    </symbol>
+    <symbol id="i-windows" viewBox="0 0 24 24"><path fill="currentColor" d="M3 5.5 10.5 4.4v7.1H3V5.5Zm8.5-1.3L21 3v8.5h-9.5V4.2ZM3 12.5h7.5v7.1L3 18.5v-6Zm8.5 0H21V21l-9.5-1.3v-7.2Z"/></symbol>
+    <symbol id="i-android" viewBox="0 0 24 24"><path fill="currentColor" d="M7.2 9h9.6c.7 0 1.2.5 1.2 1.2v6.6c0 .7-.5 1.2-1.2 1.2h-.8v2.4a1.2 1.2 0 1 1-2.4 0V18h-3.2v2.4a1.2 1.2 0 1 1-2.4 0V18h-.8c-.7 0-1.2-.5-1.2-1.2v-6.6C6 9.5 6.5 9 7.2 9Zm-3 .2a1.2 1.2 0 0 1 1.2 1.2v4.4a1.2 1.2 0 1 1-2.4 0v-4.4c0-.7.5-1.2 1.2-1.2Zm15.6 0a1.2 1.2 0 0 1 1.2 1.2v4.4a1.2 1.2 0 1 1-2.4 0v-4.4c0-.7.5-1.2 1.2-1.2ZM8.4 3.2l.9 1.4A6.6 6.6 0 0 1 12 4a6.6 6.6 0 0 1 2.7.6l.9-1.4a.4.4 0 1 1 .7.4l-.9 1.4A5.4 5.4 0 0 1 18 8.4H6a5.4 5.4 0 0 1 2.6-3.4l-.9-1.4a.4.4 0 1 1 .7-.4ZM9.6 6.3a.7.7 0 1 0 0 1.4.7.7 0 0 0 0-1.4Zm4.8 0a.7.7 0 1 0 0 1.4.7.7 0 0 0 0-1.4Z"/></symbol>
+    <symbol id="i-browser" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M4 5.5h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-11a1 1 0 0 1 1-1ZM3 9h18"/><circle cx="6" cy="7.3" r=".9" fill="currentColor"/><circle cx="8.8" cy="7.3" r=".9" fill="currentColor"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#top" aria-label="Larpcord"><svg aria-hidden="true"><use href="#d20"/></svg><span>Larpcord</span></a>
+    <nav aria-label="Sections">
+      <a href="#plugins">Plugins</a>
+      <a href="#install">Install</a>
+      <a href="#questions">Questions</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <div class="hero">
+      <div>
+        <svg class="mark" aria-hidden="true"><use href="#d20"/></svg>
+        <h1>Larpcord</h1>
+        <p class="lede">A Discord mod with dice rolling, character names and time zones built in, plus __PLUGIN_COUNT__ other plugins. For Windows, Android and desktop browsers.</p>
+        <div class="downloads">
+          <a class="dl primary" href="downloads/LarpcordSetup.exe" download>
+            <svg aria-hidden="true"><use href="#i-windows"/></svg>
+            <span>Download for Windows<small data-size="LarpcordSetup.exe">LarpcordSetup.exe</small></span>
+          </a>
+          <a class="dl" href="downloads/larpcord.apk" download>
+            <svg aria-hidden="true"><use href="#i-android"/></svg>
+            <span>Android<small data-size="larpcord.apk">larpcord.apk</small></span>
+          </a>
+          <a class="dl" href="downloads/larpcord.user.js">
+            <svg aria-hidden="true"><use href="#i-browser"/></svg>
+            <span>Browser<small data-size="larpcord.user.js">userscript</small></span>
+          </a>
+        </div>
+        <p class="fineprint">Free and open source under the GPL. <a href="downloads/larpcord-source.zip" download>Source code</a></p>
+      </div>
+      <figure class="shot">
+        <img src="installer.png" width="520" height="404" alt="The Larpcord Setup window: it lists the Discord install it found and has Install and Uninstall buttons.">
+        <figcaption>The Windows installer. One button to install, one to take it back out.</figcaption>
+      </figure>
+    </div>
+
+    <section class="block" id="plugins" aria-labelledby="plugins-title">
+      <div class="section-head">
+        <h2 id="plugins-title">What's in it</h2>
+        <p>Ten plugins you won't find in plain Discord. The last three stay off until you turn them on in Settings.</p>
+      </div>
+      <ul class="index">
+        <li class="entry">
+          <div class="entry-line"><span class="entry-name">Larp Mode</span><span class="leader"></span><span class="state on">on</span></div>
+          <p>Choose a character for a channel with the mask button next to the message box, and your messages go out under their name. Wrap a line in <code>*asterisks*</code> for an action, or start it with <code>((</code> to talk as yourself.</p>
+          <p class="try"><code>/larp as name:Sir Reginald</code></p>
+        </li>
+        <li class="entry">
+          <div class="entry-line"><span class="entry-name">Dice Roller</span><span class="leader"></span><span class="state on">on</span></div>
+          <p>Keep and drop, advantage, percentile, or six stat rolls in one go. Dropped dice get crossed out and a natural 20 is called out. Secret rolls are only shown to you.</p>
+          <p class="try"><code>/roll 6x4d6dl1</code></p>
+        </li>
+        <li class="entry">
+          <div class="entry-line"><span class="entry-name">Timezones</span><span class="leader"></span><span class="state on">on</span></div>
+          <p>Right-click someone and set their time zone. From then on their local time shows next to their name, like "4:15 AM tomorrow".</p>
+          <p class="try"><code>/time</code></p>
+        </li>
+        <li class="entry">
+          <div class="entry-line"><span class="entry-name">Ghost Ping Detector</span><span class="leader"></span><span class="state on">on</span></div>
+          <p>If someone pings you and then deletes or edits the message, you get a notification with who it was and what they wrote.</p>
+          <p class="try"><code>/ghostpings</code></p>
+        </li>
+        <li class="entry">
+          <div class="entry-line"><span class="entry-name">Text Effects</span><span class="leader"></span><span class="state on">on</span></div>
+          <p>Twelve styles, among them small caps, gothic, upside down and zalgo. Mentions and links keep working.</p>
+          <p class="try"><code>/fx style:gothic</code></p>
+        </li>
+        <li class="entry">
+          <div class="entry-line"><span class="entry-name">Quote Tools</span><span class="leader"></span><span class="state on">on</span></div>
+          <p>Adds Quote to the message menu. It works across servers and links back to the original. Select part of a message first to quote only that.</p>
+        </li>
+        <li class="entry">
+          <div class="entry-line"><span class="entry-name">Session Stats</span><span class="leader"></span><span class="state on">on</span></div>
+          <p>Counts your active time, voice time and messages per day, and can remind you once you pass a daily limit you set.</p>
+          <p class="try"><code>/stats</code></p>
+        </li>
+        <li class="entry">
+          <div class="entry-line"><span class="entry-name">Keyword Alerts</span><span class="leader"></span><span class="state">off</span></div>
+          <p>Pick words or regex patterns and get a notification when they come up in any server, even in channels you never open.</p>
+          <p class="try"><code>/keywords add</code></p>
+        </li>
+        <li class="entry">
+          <div class="entry-line"><span class="entry-name">Privacy Blur</span><span class="leader"></span><span class="state">off</span></div>
+          <p>Blurs Discord when you switch to another window, go idle, or press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>L</kbd>.</p>
+        </li>
+        <li class="entry">
+          <div class="entry-line"><span class="entry-name">Quiet Hours</span><span class="leader"></span><span class="state">off</span></div>
+          <p>Sets Do Not Disturb on a schedule, for example 23:00 to 08:00 on weeknights, then puts your old status back.</p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="block" aria-labelledby="more-title">
+      <div class="section-head">
+        <h2 id="more-title">The other __PLUGIN_COUNT__</h2>
+        <p>All included. Most start switched off; turn on the ones you want in Settings, Larpcord, Plugins.</p>
+      </div>
+      <ul class="appendix">
+__PLUGIN_LIST__
+      </ul>
+    </section>
+
+    <section class="block" id="install" aria-labelledby="install-title">
+      <div class="section-head">
+        <h2 id="install-title">Install</h2>
+        <p>Your Discord account works the same everywhere. Larpcord only changes the app you use it in.</p>
+      </div>
+      <div class="platforms">
+        <article class="platform">
+          <div class="platform-side">
+            <div class="platform-head"><svg aria-hidden="true"><use href="#i-windows"/></svg><h3>Windows</h3></div>
+            <a class="dl" href="downloads/LarpcordSetup.exe" download><svg aria-hidden="true"><use href="#i-windows"/></svg><span>LarpcordSetup.exe<small data-size="LarpcordSetup.exe">installer</small></span></a>
+          </div>
+          <div>
+            <ol>
+              <li>Download LarpcordSetup.exe and open it.</li>
+              <li>If Windows says "Windows protected your PC", click More info, then Run anyway. That warning shows up because the installer isn't code-signed.</li>
+              <li>Click Install. Discord restarts, and its settings now have a Larpcord section.</li>
+            </ol>
+            <p class="note">To remove it, open LarpcordSetup.exe again and click Uninstall.</p>
+          </div>
+        </article>
+        <article class="platform">
+          <div class="platform-side">
+            <div class="platform-head"><svg aria-hidden="true"><use href="#i-android"/></svg><h3>Android</h3></div>
+            <a class="dl" href="downloads/larpcord.apk" download><svg aria-hidden="true"><use href="#i-android"/></svg><span>larpcord.apk<small data-size="larpcord.apk">app</small></span></a>
+          </div>
+          <div>
+            <ol>
+              <li>Download larpcord.apk on your phone and open it.</li>
+              <li>Android asks whether to allow installs from your browser. Allow it, then tap Install.</li>
+              <li>Open Larpcord and log in to Discord.</li>
+            </ol>
+            <p class="note">Needs Android 9 or newer. It runs Discord's web version with Larpcord added, so notifications only come in while the app is open or in the background.</p>
+          </div>
+        </article>
+        <article class="platform">
+          <div class="platform-side">
+            <div class="platform-head"><svg aria-hidden="true"><use href="#i-browser"/></svg><h3>Browser</h3></div>
+            <a class="dl" href="downloads/larpcord.user.js"><svg aria-hidden="true"><use href="#i-browser"/></svg><span>larpcord.user.js<small data-size="larpcord.user.js">userscript</small></span></a>
+          </div>
+          <div>
+            <ol>
+              <li>Install the Tampermonkey extension in Chrome, Edge or Firefox.</li>
+              <li>Click larpcord.user.js. Tampermonkey opens and asks whether to install it.</li>
+              <li>Open discord.com/app.</li>
+            </ol>
+            <p class="note">Handy on computers where you can't install programs.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="block" id="questions" aria-labelledby="questions-title">
+      <div class="section-head">
+        <h2 id="questions-title">Questions</h2>
+      </div>
+      <dl class="faq">
+        <div>
+          <dt>Can Discord ban me for this?</dt>
+          <dd>Client mods are against Discord's Terms of Service. We don't know of anyone being banned just for using one, but it's your account, so it's your call.</dd>
+        </div>
+        <div>
+          <dt>How do I remove it?</dt>
+          <dd>On Windows, open LarpcordSetup.exe and click Uninstall. If you had another mod installed before Larpcord and its files are still there, it comes back; otherwise you get plain Discord. On Android, uninstall the app.</dd>
+        </div>
+        <div>
+          <dt>Does it update itself?</dt>
+          <dd>No. When there's a new version, download it here and install it over the old one. Your settings stay where they are.</dd>
+        </div>
+        <div>
+          <dt>Is it made by Discord?</dt>
+          <dd>No. Larpcord is an independent project and has nothing to do with Discord Inc.</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="block" aria-label="Terms and privacy">
+      <div class="legal">
+        <div id="terms">
+          <h3>Terms</h3>
+          <p>Larpcord is free software, released under the GNU General Public License, version 3 or later. You can use it, change it and share it under those terms. The full license text comes with every download, and the complete source code is in the <a href="downloads/larpcord-source.zip" download>source zip</a>.</p>
+          <p>It comes with no warranty. Using a client mod can break Discord's Terms of Service, and you're responsible for how you use it with your account.</p>
+        </div>
+        <div id="privacy">
+          <h3>Privacy</h3>
+          <p>Larpcord doesn't collect anything about you. There are no accounts, analytics or ads, and no Larpcord servers. Plugins run on your device and only talk to Discord, unless you turn on one that uses an outside service. Translate, for example, sends the text you translate to Google.</p>
+          <p>This page loads its fonts from Google Fonts, so Google sees your IP address when you open it. Nothing else here tracks you.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="foot">
+      <a class="brand" href="#top"><svg aria-hidden="true"><use href="#d20"/></svg><span>Larpcord</span></a>
+      <span>Version __VERSION__ · <a href="#terms">Terms</a> · <a href="#privacy">Privacy</a> · Not affiliated with Discord</span>
+    </div>
+  </footer>
+</div>
+</body>
+</html>

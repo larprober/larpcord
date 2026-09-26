@@ -1,65 +1,81 @@
-# Vencord
+# Larpcord
 
-![](https://img.shields.io/github/package-json/v/Vendicated/Vencord?style=for-the-badge&logo=github&logoColor=d3869b&label=&color=1d2021&labelColor=282828)
-[![Codeberg Mirror](https://img.shields.io/static/v1?style=for-the-badge&label=Codeberg%20Mirror&message=codeberg.org/Vee/cord&color=2185D0&logo=data:image/png;base64,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)](https://codeberg.org/Vee/cord)
+Larpcord is a Discord client mod with 167 built-in plugins, themes and a QuickCSS editor. Ten of the plugins are made for people who roleplay, run tabletop games, or just live in Discord too much.
 
-The cutest Discord client mod
+It runs on Discord for Windows, and on Android through the Larpcord app.
 
-![](https://github.com/user-attachments/assets/3fac98c0-c411-4d2a-97a3-13b7da8687a2)
+## The Larpcord plugins
 
-## Features
+In settings, open **Plugins** and pick **Show Larpcord Exclusives** from the filter menu. They're also marked with a LARPCORD badge.
 
--   Easy to install
--   [100+ built in plugins](https://vencord.dev/plugins)
--   Fairly lightweight despite the many inbuilt plugins
--   Excellent Browser Support: Run Vencord in your Browser via extension or UserScript
--   Works on any Discord branch: Stable, Canary or PTB all work
--   Custom CSS and Themes: Inbuilt css editor with support to import any css files (including BetterDiscord themes)
--   Privacy friendly: blocks Discord analytics & crash reporting out of the box and has no telemetry
--   Maintained very actively, broken plugins are usually fixed within 12 hours
--   Settings sync: Keep your plugins and their settings synchronised between devices / apps (optional)
+| Plugin | What it does | On by default |
+| --- | --- | --- |
+| **LarpMode** | Speak as a character. Pick a persona per channel from the mask button in the chat bar or with `/larp as`. `Hello` goes out as **Sir Galahad**: Hello, `*draws sword*` becomes an action, and lines starting with `((` or `//` go out of character, unchanged. Custom formats per character. | yes |
+| **DiceRoller** | `/roll 2d20kh1+5`, `4d6dl1`, `6x4d6dl1` for a full stat block, `d20 adv`, `d%`, with a reason label, dropped dice struck out and natural 1s and 20s called out. Secret rolls only you see. `/pick` chooses between options. Uses the system's cryptographic RNG. | yes |
+| **TextEffects** | `/fx` in mocking case, owo, vaporwave, small caps, script, gothic, monospace, bubbles, upside down, reversed, spaced or zalgo. Mentions, custom emoji and links keep working. | yes |
+| **Timezones** | Right-click someone and choose Set time zone, and their local time appears next to their name in chat ("4:22 AM tomorrow"), with the offset from you on hover. `/time` lists everyone. | yes |
+| **GhostPingDetector** | When someone pings you and deletes or edits the message to hide it, you get a notification with who it was and what they said. `/ghostpings` shows past ones. | yes |
+| **QuoteTools** | Quote and Copy as quote in the message menu. Highlight part of a message first to quote just that part. Works across channels and servers. | yes |
+| **SessionStats** | Screen time for Discord: active time, time in voice and messages sent per day. `/stats` shows the last week as a bar chart. Optional daily reminder. | yes |
+| **KeywordAlerts** | Get notified when a word, phrase or `/regex/` comes up in any server, including channels you don't have open. `/keywords add`, `/keywords hits`. | off |
+| **PrivacyBlur** | Blurs Discord when you tab away, after you go idle, or on Ctrl+Shift+L, so people near your screen can't read your chats. | off |
+| **QuietHours** | Switches you to Do Not Disturb, idle or invisible on a schedule (say 23:00 to 08:00, or weeknights only) and puts your old status back afterwards. | off |
 
+None of these patch Discord's internal code. They're built on the mod's plugin APIs (commands, message events, context menus, flux events), so a Discord update is unlikely to break them.
 
-## Installing / Uninstalling
+## Building and installing (Windows)
 
-Visit https://vencord.dev/download
+You need [Node.js](https://nodejs.org) 22 or newer, [pnpm](https://pnpm.io) and git.
 
-## Join our Support/Community Server
+```sh
+pnpm install --frozen-lockfile
+pnpm build
+```
 
-https://discord.gg/D9uwnFnqmd
+Quit Discord from the tray icon, then:
 
-## Sponsors
+```sh
+node scripts/larpcord/install.mjs
+```
 
-|     **Thanks a lot to all Vencord [sponsors](https://github.com/sponsors/Vendicated)!!**     |
-| :------------------------------------------------------------------------------------------: |
-|   [![](https://meow.vendicated.dev/sponsors.png)](https://github.com/sponsors/Vendicated)    |
-| *generated using [github-sponsor-graph](https://github.com/Vendicated/github-sponsor-graph)* |
+Start Discord again. Settings now has a **Larpcord** section.
 
+To go back to what you had before, quit Discord and run the command below. It restores your previous mod if its files are still on disk, and plain Discord otherwise.
 
-## Star History
+```sh
+node scripts/larpcord/install.mjs --uninstall
+```
 
-<a href="https://star-history.com/#Vendicated/Vencord&Timeline">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=Vendicated/Vencord&type=Timeline&theme=dark" />
-    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=Vendicated/Vencord&type=Timeline" />
-    <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=Vendicated/Vencord&type=Timeline" />
-  </picture>
-</a>
+Add `--ptb`, `--canary` or `--all` for other Discord branches. Larpcord re-applies itself when Discord updates. If Settings ever loses its Larpcord section after a Discord update, quit Discord and run the install script again.
 
-## Disclaimer
+Start Discord the normal way (Start menu, desktop or taskbar). If you launch it from a sandboxed program, like a terminal inside a packaged Microsoft Store app, Windows may redirect Discord's updater writes into that app's private storage. The updater then reinstalls over the loader and can leave a Start-menu shortcut pointing at the sandbox.
 
-Discord is trademark of Discord Inc. and solely mentioned for the sake of descriptivity.
-Mention of it does not imply any affiliation with or endorsement by Discord Inc.
+After changing code, run `pnpm build` and press Ctrl+R in Discord to reload.
 
-<details>
-<summary>Using Vencord violates Discord's terms of service</summary>
+## Making a release
 
-Client modifications are against Discord’s Terms of Service.
+```sh
+node scripts/larpcord/release.mjs
+```
 
-However, Discord is pretty indifferent about them and there are no known cases of users getting banned for using client mods! So you should generally be fine as long as you don’t use any plugins that implement abusive behaviour. But no worries, all inbuilt plugins are safe to use!
+This writes everything to `release/`:
 
-Regardless, if your account is very important to you and it getting disabled would be a disaster for you, you should probably not use any client mods (not exclusive to Vencord), just to be safe
+- `LarpcordSetup.exe`, the Windows installer, with the mod embedded. It's compiled with the C# compiler that comes with Windows, so nothing extra is needed. It isn't code-signed, so Windows SmartScreen warns about it the first time it runs.
+- `larpcord.apk`, the Android app from `../larpcord-android`. It's signed with the key in that folder's `keystore/`; keep that key, since updates need the same one.
+- `larpcord.user.js` for Tampermonkey.
+- `larpcord-source.zip`, the full source of all of the above. The GPL requires offering it next to the downloads. The Android signing key is left out.
+- `site/`, the static website with all the downloads in `site/downloads/`.
 
-Additionally, make sure not to post screenshots with Vencord in a server where you might get banned for it
+To put the site online with GitHub Pages, create a repository, copy the contents of `release/site/` into it, and turn on Pages in the repository's settings (Deploy from a branch, root folder). It appears at `https://<your-username>.github.io/<repository>/`. If you name the repository `<your-username>.github.io`, it's at `https://<your-username>.github.io/` instead.
 
-</details>
+## Where things live
+
+- `src/larpcordplugins/` holds the Larpcord plugins, one folder each. `_lib.ts` has shared helpers.
+- Settings, QuickCSS and themes: `%APPDATA%\Larpcord`
+- Plugin data (keyword hits, ghost ping log, time zones, stats) is stored in Discord's IndexedDB.
+
+## License
+
+Larpcord is free software under the GNU General Public License v3.0 or later (see [LICENSE](LICENSE)). It is a modified version of Vencord, copyright Vendicated and contributors; the copyright notices in the source files are kept as the license requires. Anyone you give a Larpcord build to is entitled to this source code.
+
+Client mods are against Discord's Terms of Service. Discord hasn't been known to ban people for them, but use Larpcord at your own risk.

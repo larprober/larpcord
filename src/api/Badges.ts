@@ -17,7 +17,6 @@
 */
 
 import ErrorBoundary from "@components/ErrorBoundary";
-import BadgeAPIPlugin from "@plugins/_api/badges";
 import { ComponentType, HTMLProps } from "react";
 
 export const enum BadgePosition {
@@ -100,16 +99,6 @@ export function _getBadges(args: BadgeUserArgs) {
         } else {
             badges.push(...b);
         }
-    }
-
-    const donorBadges = BadgeAPIPlugin.getDonorBadges(args.userId);
-    if (donorBadges) {
-        badges.unshift(
-            ...donorBadges.map(badge => ({
-                ...args,
-                ...badge,
-            }))
-        );
     }
 
     return badges;

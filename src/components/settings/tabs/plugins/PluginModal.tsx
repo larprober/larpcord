@@ -24,7 +24,6 @@ import { useSettings } from "@api/Settings";
 import { BaseText } from "@components/BaseText";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { debounce } from "@shared/debounce";
-import { gitRemote } from "@shared/vencordUserAgent";
 import { classNameFactory } from "@utils/css";
 import { proxyLazy } from "@utils/lazy";
 import { Margins } from "@utils/margins";
@@ -39,7 +38,7 @@ import { PluginMeta } from "~plugins";
 
 import { OptionComponentMap } from "./components";
 import { openContributorModal } from "./ContributorModal";
-import { FavoriteButton, GithubButton, WebsiteButton } from "./PluginModalButtons";
+import { FavoriteButton } from "./PluginModalButtons";
 
 const cl = classNameFactory("vc-plugin-modal-");
 
@@ -179,14 +178,6 @@ export default function PluginModal({ plugin, onRestartNeeded, onClose, transiti
                             <FavoriteButton
                                 isFavorite={pluginSettings.isFavorite ?? false}
                                 onClick={() => pluginSettings.isFavorite = !pluginSettings.isFavorite}
-                            />
-                            <WebsiteButton
-                                text="View more info"
-                                href={`https://vencord.dev/plugins/${plugin.name}`}
-                            />
-                            <GithubButton
-                                text="View source code"
-                                href={`https://github.com/${gitRemote}/tree/main/src/plugins/${pluginMeta.folderName}`}
                             />
                         </div>
                     )}

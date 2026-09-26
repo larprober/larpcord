@@ -31,17 +31,13 @@ export { PlainSettings, Settings };
 
 import { coreStyleRootNode, initStyles } from "@api/Styles";
 import { openSettingsTabModal, UpdaterTab } from "@components/settings";
-import { debounce } from "@shared/debounce";
 import { IS_WINDOWS } from "@utils/constants";
 import { createAndAppendStyle } from "@utils/css";
 import { StartAt } from "@utils/types";
-import { SettingsRouter } from "@webpack/common";
 
-import { get as dsGet } from "./api/DataStore";
 import { NotificationData, showNotification } from "./api/Notifications";
 import { initPluginManager, PMLogger, startAllPlugins } from "./api/PluginManager";
-import { PlainSettings, Settings, SettingsStore } from "./api/Settings";
-import { areLocalSettingsDirty, getCloudSettings, getCloudSyncDirection, markLocalSettingsDirty, putCloudSettings, shouldCloudSync } from "./api/SettingsSync/cloudSync";
+import { PlainSettings, Settings } from "./api/Settings";
 import { relaunch } from "./utils/native";
 import { checkForUpdates, update, UpdateLogger } from "./utils/updater";
 import { onceReady } from "./webpack";
@@ -49,57 +45,6 @@ import { patches } from "./webpack/patchWebpack";
 
 if (IS_REPORTER) {
     require("./debug/runReporter");
-}
-
-async function syncSettings() {
-    // pre-check for local shared settings
-    if (
-        Settings.cloud.authenticated &&
-        !await dsGet("Vencord_cloudSecret") // this has been enabled due to local settings share or some other bug
-    ) {
-        // show a notification letting them know and tell them how to fix it
-        showNotification({
-            title: "Cloud Integrations",
-            body: "We've noticed you have cloud integrations enabled in another client! Due to limitations, you will " +
-                "need to re-authenticate to continue using them. Click here to go to the settings page to do so!",
-            color: "var(--yellow-360)",
-            onClick: () => SettingsRouter.openUserSettings("vencord_cloud_panel"),
-            noPersist: true
-        });
-        return;
-    }
-
-    if (
-        Settings.cloud.settingsSync && // if it's enabled
-        Settings.cloud.authenticated && // if cloud integrations are enabled
-        getCloudSyncDirection() !== "manual" // if we're not in manual mode
-    ) {
-        if (areLocalSettingsDirty() && shouldCloudSync("push")) {
-            await putCloudSettings();
-        } else if (shouldCloudSync("pull") && await getCloudSettings(false)) { // if we synchronized something (false means no sync)
-            // we show a notification here instead of allowing getCloudSettings() to show one to declutter the amount of
-            // potential notifications that might occur. getCloudSettings() will always send a notification regardless if
-            // there was an error to notify the user, but besides that we only want to show one notification instead of all
-            // of the possible ones it has (such as when your settings are newer).
-            showNotification({
-                title: "Cloud Settings",
-                body: "Your settings have been updated! Click here to restart to fully apply changes!",
-                color: "var(--green-360)",
-                onClick: relaunch
-            });
-        }
-    }
-
-    const saveSettingsOnFrequentAction = debounce(async () => {
-        if (Settings.cloud.settingsSync && Settings.cloud.authenticated && shouldCloudSync("push")) {
-            await putCloudSettings();
-        }
-    }, 60_000);
-
-    SettingsStore.addGlobalChangeListener(() => {
-        markLocalSettingsDirty();
-        saveSettingsOnFrequentAction();
-    });
 }
 
 let notifiedForUpdatesThisSession = false;
@@ -126,7 +71,7 @@ async function runUpdateCheck() {
             await update();
             if (Settings.autoUpdateNotification) {
                 notify({
-                    title: "Vencord has been updated!",
+                    title: "Larpcord has been updated!",
                     body: "Click here to restart",
                     onClick: relaunch
                 });
@@ -135,7 +80,7 @@ async function runUpdateCheck() {
         }
 
         notify({
-            title: "A Vencord update is available!",
+            title: "A Larpcord update is available!",
             body: "Click here to view the update",
             onClick: () => openSettingsTabModal(UpdaterTab!)
         });
@@ -147,8 +92,6 @@ async function runUpdateCheck() {
 async function init() {
     await onceReady;
     startAllPlugins(StartAt.WebpackReady);
-
-    syncSettings();
 
     if (!IS_WEB && !IS_UPDATER_DISABLED) {
         runUpdateCheck();
@@ -166,7 +109,7 @@ async function init() {
                 "Webpack has finished initialising, but some patches haven't been applied yet.",
                 "This might be expected since some Modules are lazy loaded, but please verify",
                 "that all plugins are working as intended.",
-                "You are seeing this warning because this is a Development build of Vencord.",
+                "You are seeing this warning because this is a Development build of Larpcord.",
                 "\nThe following patches have not been applied:",
                 "\n\n" + pendingPatches.map(p => `${p.plugin}: ${p.find}`).join("\n")
             );

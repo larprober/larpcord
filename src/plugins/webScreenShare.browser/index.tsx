@@ -26,7 +26,8 @@ class NotAllowedError extends Error {
 
 const logger = new Logger("VencordScreenShare");
 
-const getDisplayMedia = navigator.mediaDevices.getDisplayMedia.bind(navigator.mediaDevices);
+// Undefined where screen capture doesn't exist at all, like Android's WebView
+const getDisplayMedia = navigator.mediaDevices?.getDisplayMedia?.bind(navigator.mediaDevices) as MediaDevices["getDisplayMedia"] | undefined;
 
 function openScreenSharePicker(options: DisplayMediaStreamOptions) {
     return new Promise<MediaStream>((resolve, reject) => {
@@ -108,7 +109,7 @@ function ModalComponent({ modalProps, submit, close, options }: {
             delete videoOptions.width;
 
             submit(
-                getDisplayMedia({
+                getDisplayMedia!({
                     video: {
                         ...videoOptions,
                         frameRate,
@@ -274,10 +275,10 @@ export default definePlugin({
     managedStyle,
 
     start() {
-        navigator.mediaDevices.getDisplayMedia = openScreenSharePicker;
+        if (getDisplayMedia) navigator.mediaDevices.getDisplayMedia = openScreenSharePicker;
     },
     stop() {
-        navigator.mediaDevices.getDisplayMedia = getDisplayMedia;
+        if (getDisplayMedia) navigator.mediaDevices.getDisplayMedia = getDisplayMedia;
     },
 
     patches: [

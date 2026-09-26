@@ -1,0 +1,61 @@
+:root {
+    --lc-privacy-blur: 16px;
+}
+
+html.lc-privacy-on[data-lc-privacy-scope="all"] #app-mount {
+    filter: blur(var(--lc-privacy-blur));
+    transition: filter 120ms ease-out;
+}
+
+html.lc-privacy-on[data-lc-privacy-scope="content"] [class*="chatContent"],
+html.lc-privacy-on[data-lc-privacy-scope="content"] [class*="membersWrap"],
+html.lc-privacy-on[data-lc-privacy-scope="content"] [class*="privateChannels"],
+html.lc-privacy-on[data-lc-privacy-scope="content"] [class*="threadSidebar"] {
+    filter: blur(var(--lc-privacy-blur));
+}
+
+/* Starts below the title bar so the window can still be dragged, minimised and closed */
+.lc-privacy-overlay {
+    position: fixed;
+    inset: 36px 0 0;
+    z-index: 10000;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+}
+
+.lc-privacy-overlay[hidden] {
+    display: none;
+}
+
+.lc-privacy-card {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: center;
+    padding: 14px 22px;
+    border-radius: 12px;
+    background: rgb(0 0 0 / 55%);
+    color: #fff;
+    font-family: var(--font-primary);
+    font-size: 14px;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 30%);
+}
+
+.lc-privacy-card strong {
+    font-size: 16px;
+    letter-spacing: 0.02em;
+}
+
+.lc-privacy-card span {
+    opacity: 0.8;
+}
+
+/* In "content only" mode the rest of Discord stays clickable; only the card catches clicks */
+html[data-lc-privacy-scope="content"] .lc-privacy-overlay {
+    pointer-events: none;
+}
+
+html[data-lc-privacy-scope="content"] .lc-privacy-card {
+    pointer-events: auto;
+}

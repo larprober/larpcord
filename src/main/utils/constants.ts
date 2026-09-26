@@ -19,11 +19,15 @@
 import { app } from "electron";
 import { join } from "path";
 
-export const DATA_DIR = process.env.VENCORD_USER_DATA_DIR ?? (
+export const DATA_DIR = process.env.LARPCORD_USER_DATA_DIR ?? process.env.VENCORD_USER_DATA_DIR ?? (
     process.env.DISCORD_USER_DATA_DIR
-        ? join(process.env.DISCORD_USER_DATA_DIR, "..", "VencordData")
-        : join(app.getPath("userData"), "..", "Vencord")
+        ? join(process.env.DISCORD_USER_DATA_DIR, "..", "LarpcordData")
+        : join(app.getPath("userData"), "..", "Larpcord")
 );
+/** Where a regular Vencord install keeps its data. Larpcord copies it over on first launch. */
+export const VENCORD_DATA_DIR = process.env.DISCORD_USER_DATA_DIR
+    ? join(process.env.DISCORD_USER_DATA_DIR, "..", "VencordData")
+    : join(app.getPath("userData"), "..", "Vencord");
 export const SETTINGS_DIR = join(DATA_DIR, "settings");
 export const THEMES_DIR = join(DATA_DIR, "themes");
 export const QUICK_CSS_PATH = join(SETTINGS_DIR, "quickCss.css");

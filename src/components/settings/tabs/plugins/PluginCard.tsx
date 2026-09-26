@@ -12,6 +12,8 @@ import { AddonCard } from "@components/settings/AddonCard";
 import { Plugin } from "@utils/types";
 import { React, showToast, Toasts } from "@webpack/common";
 
+import { PluginMeta } from "~plugins";
+
 import { cl, logger } from ".";
 import { openPluginModal } from "./PluginModal";
 
@@ -82,6 +84,7 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
             name={plugin.name}
             description={plugin.description}
             isNew={isNew}
+            isLarpcord={PluginMeta[plugin.name]?.larpcordPlugin}
             enabled={isEnabled()}
             setEnabled={toggleEnabled}
             disabled={disabled}

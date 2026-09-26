@@ -80,7 +80,8 @@ const enum SearchStatus {
     DISABLED,
     NEW,
     USER_PLUGINS,
-    API_PLUGINS
+    API_PLUGINS,
+    LARPCORD_PLUGINS
 }
 
 function ExcludedPluginsList({ search }: { search: string; }) {
@@ -94,8 +95,8 @@ function ExcludedPluginsList({ search }: { search: string; }) {
         discordDesktop: "Discord Desktop app",
         vesktop: "Vesktop app",
         web: "Vesktop app and the Web version of Discord",
-        dev: "Developer version of Vencord",
-        browser: "Web Browser version of Vencord"
+        dev: "Developer version of Larpcord",
+        browser: "Web Browser version of Larpcord"
     };
 
     return (
@@ -195,6 +196,9 @@ function PluginSettings() {
             case SearchStatus.API_PLUGINS:
                 if (!plugin.name.endsWith("API")) return false;
                 break;
+            case SearchStatus.LARPCORD_PLUGINS:
+                if (!PluginMeta[plugin.name]?.larpcordPlugin) return false;
+                break;
         }
 
         if (tags.length && tags.some(t => !plugin.tags?.includes(t))) return false;
@@ -240,7 +244,7 @@ function PluginSettings() {
 
         if (isRequired) {
             const tooltipText = p.required || !depMap[p.name]
-                ? "This plugin is required for Vencord to function."
+                ? "This plugin is required for Larpcord to function."
                 : makeDependencyList(depMap[p.name]?.filter(d => settings.plugins[d].enabled));
 
             requiredPlugins.push(
@@ -295,6 +299,7 @@ function PluginSettings() {
                     <Select
                         options={[
                             { label: "Show All", value: SearchStatus.ALL, default: true },
+                            { label: "Show Larpcord Exclusives", value: SearchStatus.LARPCORD_PLUGINS },
                             { label: "Show Favorites", value: SearchStatus.FAVORITES },
                             { label: "Show Enabled", value: SearchStatus.ENABLED },
                             { label: "Show Disabled", value: SearchStatus.DISABLED },

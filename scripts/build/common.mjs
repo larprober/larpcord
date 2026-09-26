@@ -46,12 +46,14 @@ export const IS_REPORTER = process.argv.includes("--reporter");
 export const IS_ANTI_CRASH_TEST = process.argv.includes("--anti-crash-test");
 export const IS_STANDALONE = process.argv.includes("--standalone");
 
-export const IS_UPDATER_DISABLED = process.argv.includes("--disable-updater");
+// Larpcord builds ship without the in-app updater: pulling upstream changes into a
+// rebranded fork needs a manual merge. Pass --enable-updater to get it back.
+export const IS_UPDATER_DISABLED = !process.argv.includes("--enable-updater");
 export const gitHash = process.env.VENCORD_HASH || execSync("git rev-parse --short HEAD", { encoding: "utf-8" }).trim();
 
 export const banner = {
     js: `
-// Vencord ${gitHash}
+// Larpcord ${gitHash}
 // Standalone: ${IS_STANDALONE}
 // Platform: ${IS_STANDALONE === false ? process.platform : "Universal"}
 // Updater Disabled: ${IS_UPDATER_DISABLED}
@@ -145,7 +147,7 @@ export const globPlugins = kind => ({
         });
 
         build.onLoad({ filter, namespace: "import-plugins" }, async () => {
-            const pluginDirs = ["plugins/_api", "plugins/_core", "plugins", "userplugins"];
+            const pluginDirs = ["plugins/_api", "plugins/_core", "plugins", "larpcordplugins", "userplugins"];
             let code = "";
             let pluginsCode = "\n";
             let metaCode = "\n";
@@ -153,6 +155,7 @@ export const globPlugins = kind => ({
             let i = 0;
             for (const dir of pluginDirs) {
                 const userPlugin = dir === "userplugins";
+                const larpcordPlugin = dir === "larpcordplugins";
 
                 const fullDir = `./src/${dir}`;
                 if (!await exists(fullDir)) continue;
@@ -185,7 +188,7 @@ export const globPlugins = kind => ({
                     const mod = `p${i}`;
                     code += `import ${mod} from "./${dir}/${fileName.replace(/\.tsx?$/, "")}";\n`;
                     pluginsCode += `[${mod}.name]:${mod},\n`;
-                    metaCode += `[${mod}.name]:${JSON.stringify({ folderName, userPlugin })},\n`;
+                    metaCode += `[${mod}.name]:${JSON.stringify({ folderName, userPlugin, larpcordPlugin })},\n`;
                     i++;
                 }
             }

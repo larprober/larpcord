@@ -9,9 +9,27 @@ import { IpcEvents } from "@shared/IpcEvents";
 import { SettingsStore } from "@shared/SettingsStore";
 import { mergeDefaults } from "@utils/mergeDefaults";
 import { ipcMain } from "electron";
-import { mkdirSync, readFileSync, writeFileSync } from "fs";
+import { cpSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
+import { join } from "path";
 
-import { NATIVE_SETTINGS_FILE, SETTINGS_DIR, SETTINGS_FILE } from "./utils/constants";
+import { DATA_DIR, NATIVE_SETTINGS_FILE, SETTINGS_DIR, SETTINGS_FILE, THEMES_DIR, VENCORD_DATA_DIR } from "./utils/constants";
+
+// First launch of Larpcord on a machine that already had Vencord: bring the
+// user's plugin settings, QuickCSS and themes along instead of starting blank.
+// Vencord's own folder is only read, never modified.
+if (!existsSync(SETTINGS_FILE) && DATA_DIR !== VENCORD_DATA_DIR) {
+    try {
+        const oldSettings = join(VENCORD_DATA_DIR, "settings");
+        const oldThemes = join(VENCORD_DATA_DIR, "themes");
+        if (existsSync(join(oldSettings, "settings.json"))) {
+            cpSync(oldSettings, SETTINGS_DIR, { recursive: true, force: false });
+            if (existsSync(oldThemes)) cpSync(oldThemes, THEMES_DIR, { recursive: true, force: false });
+            console.log("[Larpcord] Imported settings and themes from", VENCORD_DATA_DIR);
+        }
+    } catch (err) {
+        console.error("[Larpcord] Could not import Vencord settings", err);
+    }
+}
 
 mkdirSync(SETTINGS_DIR, { recursive: true });
 

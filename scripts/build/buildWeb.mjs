@@ -84,7 +84,7 @@ const buildConfigs = [
     {
         ...commonOptions,
         outfile: "dist/browser.js",
-        footer: { js: "//# sourceURL=file:///VencordWeb" }
+        footer: { js: "//# sourceURL=file:///LarpcordWeb" }
     },
     {
         ...commonOptions,
@@ -93,7 +93,7 @@ const buildConfigs = [
             ...commonOptions.define,
             IS_EXTENSION: "true"
         },
-        footer: { js: "//# sourceURL=file:///VencordWeb" }
+        footer: { js: "//# sourceURL=file:///LarpcordWeb" }
     },
     {
         ...commonOptions,

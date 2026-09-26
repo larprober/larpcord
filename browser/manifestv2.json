@@ -2,10 +2,9 @@
     "manifest_version": 2,
     "minimum_chrome_version": "91",
 
-    "name": "Vencord Web",
-    "description": "The cutest Discord mod now in your browser",
-    "author": "Vendicated",
-    "homepage_url": "https://github.com/Vendicated/Vencord",
+    "name": "Larpcord Web",
+    "description": "Larpcord, the Discord mod, in your browser",
+    "author": "Larpcord contributors",
     "icons": {
         "128": "icon.png"
     },

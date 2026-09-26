@@ -16,7 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-import "./updater";
 import "./ipcPlugins";
 import "./settings";
 
@@ -34,6 +33,9 @@ import { getThemeInfo, stripBOM, UserThemeHeader } from "./themes";
 import { ALLOWED_PROTOCOLS, QUICK_CSS_PATH, SETTINGS_DIR, THEMES_DIR } from "./utils/constants";
 import { ensureSafePath } from "./utils/ensureSafePath";
 import { makeLinksOpenExternally } from "./utils/externalLinks";
+
+// Larpcord ships with the updater off; its GitHub/git handlers are only registered on request
+if (!IS_UPDATER_DISABLED) require("./updater");
 
 const RENDERER_CSS_PATH = join(__dirname, IS_VESKTOP ? "vencordDesktopRenderer.css" : "renderer.css");
 
@@ -81,7 +83,7 @@ ipcMain.handle(IpcEvents.OPEN_EXTERNAL, (_, url) => {
         throw "Disallowed protocol.";
 
     shell.openExternal(url)
-        .catch(err => console.error("[Vencord] Failed to open external link", url, err));
+        .catch(err => console.error("[Larpcord] Failed to open external link", url, err));
 });
 
 
@@ -147,7 +149,7 @@ ipcMain.on(IpcEvents.GET_MONACO_THEME, e => {
 });
 
 ipcMain.handle(IpcEvents.OPEN_MONACO_EDITOR, async () => {
-    const title = "Vencord QuickCSS Editor";
+    const title = "Larpcord QuickCSS Editor";
     const existingWindow = BrowserWindow.getAllWindows().find(w => w.title === title);
     if (existingWindow && !existingWindow.isDestroyed()) {
         existingWindow.focus();

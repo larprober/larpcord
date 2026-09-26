@@ -1,0 +1,35 @@
+.lc-larp-active {
+    color: #d97706;
+}
+
+.lc-larp-hint {
+    margin-top: 4px;
+    color: var(--text-muted);
+}
+
+.lc-larp-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lc-larp-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.lc-larp-row > :first-child {
+    flex: 1;
+}
+
+.lc-larp-name {
+    font-weight: 600;
+    color: var(--text-default, var(--text-normal));
+}
+
+.lc-larp-format {
+    color: var(--text-muted);
+    font-family: var(--font-code);
+    font-size: 12px;
+}

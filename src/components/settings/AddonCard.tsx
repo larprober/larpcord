@@ -33,6 +33,7 @@ interface Props {
     setEnabled: (enabled: boolean) => void;
     disabled?: boolean;
     isNew?: boolean;
+    isLarpcord?: boolean;
     onMouseEnter?: MouseEventHandler<HTMLDivElement>;
     onMouseLeave?: MouseEventHandler<HTMLDivElement>;
 
@@ -41,7 +42,7 @@ interface Props {
     author?: ReactNode;
 }
 
-export function AddonCard({ disabled, isNew, name, infoButton, footer, author, enabled, setEnabled, description, onMouseEnter, onMouseLeave }: Props) {
+export function AddonCard({ disabled, isNew, isLarpcord, name, infoButton, footer, author, enabled, setEnabled, description, onMouseEnter, onMouseLeave }: Props) {
     const titleRef = useRef<HTMLDivElement>(null);
     const titleContainerRef = useRef<HTMLDivElement>(null);
 
@@ -70,6 +71,7 @@ export function AddonCard({ disabled, isNew, name, infoButton, footer, author, e
                             </div>
                         </div>
                         {isNew && <AddonBadge text="NEW" color="#ED4245" />}
+                        {isLarpcord && <AddonBadge text="LARPCORD" color="#B45309" />}
                     </Text>
 
                     {!!author && (
